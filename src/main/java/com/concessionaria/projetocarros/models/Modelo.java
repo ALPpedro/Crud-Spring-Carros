@@ -16,8 +16,10 @@ public class Modelo {
     @ManyToOne
     private Marca marca;
 
-    @OneToMany
-    private List<Veiculo> veiculos;
+
+
+    public Modelo() {
+    }
 
     public Modelo(Modelo modelo) {
     }

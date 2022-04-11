@@ -9,12 +9,15 @@ public class Veiculo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "valor")
+    private float valor;
+
     @ManyToOne
     private Modelo modelo;
 
-    private int valor;
 
-    public Veiculo(Long id, Modelo modelo, int valor) {
+
+    public Veiculo(Long id, Modelo modelo, float valor) {
         super();
         this.id = id;
         this.modelo = modelo;
@@ -22,6 +25,10 @@ public class Veiculo {
     }
 
     public Veiculo(Veiculo veiculo) {
+    }
+
+    public Veiculo() {
+
     }
 
     public Long getId() {
@@ -40,11 +47,11 @@ public class Veiculo {
         this.modelo = modelo;
     }
 
-    public int getValor() {
+    public float getValor() {
         return valor;
     }
 
-    public void setValor(int valor) {
+    public void setValor(float valor) {
         this.valor = valor;
     }
 }

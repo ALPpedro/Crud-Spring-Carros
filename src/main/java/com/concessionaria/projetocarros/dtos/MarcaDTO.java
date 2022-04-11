@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 public class MarcaDTO {
 
-    @NotBlank(message = "O campo nome está vazio")
+    @NotBlank(message = "O campo marca está vazio")
     private String nome;
 
     public String getNome() {

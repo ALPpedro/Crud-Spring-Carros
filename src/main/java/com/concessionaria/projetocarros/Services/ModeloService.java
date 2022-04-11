@@ -1,13 +1,14 @@
 package com.concessionaria.projetocarros.Services;
 
-import com.concessionaria.projetocarros.Repositories.MarcaDinamicoRepository;
 import com.concessionaria.projetocarros.Repositories.MarcaRepository;
 import com.concessionaria.projetocarros.Repositories.ModeloDinamicoRepository;
-import com.concessionaria.projetocarros.dtos.MarcaDTO;
+import com.concessionaria.projetocarros.Repositories.ModeloRepository;
+import com.concessionaria.projetocarros.dtos.ModeloDTO;
 import com.concessionaria.projetocarros.exception.Error;
 import com.concessionaria.projetocarros.exception.ResourceNotFoundException;
 import com.concessionaria.projetocarros.models.Marca;
 import com.concessionaria.projetocarros.models.Modelo;
+import com.concessionaria.projetocarros.models.resposta.ModeloResposta;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,36 +25,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
 @Service
-public class MarcaService {
-    final MarcaRepository marcaRepository;
-    final ModeloDinamicoRepository modeloDinamicoRepository;
-    final MarcaDinamicoRepository marcaDinamicoRepository;
+public class ModeloService {
+    private final ModeloRepository modeloRepository;
+    private final ModeloDinamicoRepository modeloDinamicoRepository;
+    private final MarcaRepository marcaRepository;
 
-    public MarcaService(MarcaRepository marcaRepository, ModeloDinamicoRepository modeloDinamicoRepository, MarcaDinamicoRepository marcaDinamicoRepository) {
-        this.marcaRepository = marcaRepository;
+
+    public ModeloService(ModeloRepository modeloRepository, ModeloDinamicoRepository modeloDinamicoRepository, MarcaRepository marcaRepository) {
+        this.modeloRepository = modeloRepository;
         this.modeloDinamicoRepository = modeloDinamicoRepository;
-        this.marcaDinamicoRepository = marcaDinamicoRepository;
+        this.marcaRepository = marcaRepository;
     }
 
     @Transactional
-    public ResponseEntity<Object> salvar(MarcaDTO marcaDTO){
-        var marca = new Marca();
-
-        BeanUtils.copyProperties(marcaDTO, marca);
-        marcaRepository.save(marca);
-        return ResponseEntity.ok(true);
+    public ResponseEntity<Object> salvar(ModeloDTO modeloDTO){
+        var modelo = new Modelo();
+        BeanUtils.copyProperties(modeloDTO, modelo);
+        modeloRepository.save(modelo);
+        return ResponseEntity.ok(modelo);
     }
-    @Transactional
-    public ResponseEntity<Object> save(Marca marca){
-        marcaRepository.save(marca);
-        return ResponseEntity.ok(marca);
+    public Optional<Modelo> findById(Long id){
+        return modeloRepository.findById(id);
     }
 
-    public Marca buscarids(Long id){
-      Marca marca=  marcaRepository.findById(id).
+    public Modelo buscarids(Long id){
+        Modelo modelo =  modeloRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Id não encontrado"));
-        return marca;
+        return modelo;
     }
 
     public Error error(ResourceNotFoundException exception){
@@ -65,20 +65,17 @@ public class MarcaService {
         error.setPath("test");
         return error;
     }
-    public List<Marca> buscartd(){
-        return marcaRepository.findAll();
+
+    public List<Modelo> buscartudo(){
+        return modeloRepository.findAll();
+    }
+
+    public Page<ModeloResposta> buscartudao(Long idMarca, String modelo, Pageable pageable) {
+        return modeloDinamicoRepository.find1(modelo, idMarca, pageable);
     }
 
     public void delete(Long id){
-        marcaRepository.deleteById(id);
-    }
-
-    public Optional<Marca> findById(Long id){
-       return marcaRepository.findById(id);
-    }
-
-    public Page<Marca> buscartudo(String nome, Pageable pageable){
-        return marcaDinamicoRepository.find1(nome, pageable);
+        modeloRepository.deleteById(id);
     }
 
     public Map<String, String> handleValidationException(MethodArgumentNotValidException ex){
@@ -94,7 +91,9 @@ public class MarcaService {
         return errors;
     }
 
-    public List<Marca> buscar() {
-        return marcaRepository.findAll();
+    @Transactional
+    public ResponseEntity<Object> save(Modelo modelo){
+        modeloRepository.save(modelo);
+        return ResponseEntity.ok(modelo);
     }
 }

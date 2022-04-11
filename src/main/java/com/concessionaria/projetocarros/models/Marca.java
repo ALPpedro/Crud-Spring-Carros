@@ -12,8 +12,6 @@ public class Marca {
     @Column(name = "nome")
     private String nome;
 
-    @OneToMany
-    private List<Modelo> modelos;
 
     public Marca(Long id, String nome) {
         super();
